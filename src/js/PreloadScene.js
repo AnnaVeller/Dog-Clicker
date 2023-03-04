@@ -1,4 +1,5 @@
 import Phaser from "phaser"
+import {SCENE_CONFIG} from "./sceneConfig"
 
 export default class PreloadScene extends Phaser.Scene {
   constructor() {
@@ -8,9 +9,9 @@ export default class PreloadScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image('bg', require('../assets/bg.png'))
-    this.load.image('shrek', require('../assets/shrek.png'))
-    this.load.image('progress', require('../assets/progress.png'))
+    SCENE_CONFIG.sprites.forEach((el) => {
+      this.load.image(el.key, el.url)
+    })
   }
 
   create() {
