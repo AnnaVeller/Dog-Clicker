@@ -1,5 +1,6 @@
 import Phaser from "phaser"
 import {SCENE_CONFIG} from "./sceneConfig"
+import TextSprite from "./TextSprite"
 
 export default class PreloadScene extends Phaser.Scene {
   constructor() {
@@ -15,13 +16,17 @@ export default class PreloadScene extends Phaser.Scene {
   }
 
   create() {
-    this.add.text(
-      this.cameras.main.centerX,
-      this.cameras.main.centerY,
-      'Click to start',
-      {font: '50px Arial', fill: '#73d5a1'})
-      .setOrigin(0.5)
+    const text = new TextSprite(this, {
+      x: this.cameras.main.centerX,
+      y: this.cameras.main.centerY,
+      text: 'Click to start',
+      textStyle: {font: '50px Arial', fill: '#73d5a1'},
+      alpha: 0
+    })
 
+    text.showText()
+
+    // this.scene.start('Game')
 
     this.input.once('pointerdown', () => {
       this.scene.start('Game')

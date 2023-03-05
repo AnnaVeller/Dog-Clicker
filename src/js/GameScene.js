@@ -1,4 +1,7 @@
 import Phaser from "phaser"
+import Sprite from "./Sprite"
+import Shrek from "./Shrek"
+import Counter from "./Counter"
 
 export default class GameScene extends Phaser.Scene {
   constructor() {
@@ -10,41 +13,35 @@ export default class GameScene extends Phaser.Scene {
   create() {
     const container = this.add.container(0, 0)
 
-    const bg = this.add.sprite(0, 0, 'bg')
-    bg.setOrigin(0, 0)
-    container.add(bg)
+    const bg = new Sprite(this, {
+      x: 0, y: 0,
+      key: 'bg',
+      origin: {x: 0, y: 0}
+    })
 
-    const progress = this.add.sprite(bg.width / 2, 50, 'progress')
-    progress.setOrigin(0.5, 0.5)
-    container.add(progress)
+    const progress = new Sprite(this, {
+      x: bg.content.width / 2, y: 50,
+      key: 'progress'
+    })
 
-    const shrek = this.add.sprite(bg.width / 2, bg.height / 2, 'shrek')
-    shrek.setOrigin(0.5, 0.5)
-    container.add(shrek)
+    const shrek = new Shrek(this, {
+      x: bg.content.width / 2, y: bg.content.height / 2,
+      key: 'shrek',
+      interactive: true,
+    })
 
-    shrek.setInteractive()
-    shrek.on('pointerdown', (pointer) => this.handle(shrek, pointer))
-  }
+    const counterText = new Counter(this, {
+      x: this.cameras.main.centerX,
+      y: 45,
+      text: 0,
+      textStyle: {font: '40px Arial', fill: '#3d2828'},
+    })
 
-  handle(actor, pointer) {
-    const name = `${actor}Tween`
-
-    if (this.animations && this.animations[name] && this.animations[name].isPlaying()) {
-      this.animations[name].stop()
-      actor.setScale(1, 1)
-      return
-    }
-
-    this.animations[name] = this.tweens.add({
-      targets: actor,
-      scaleX: 1.2,
-      scaleY: 1.2,
-      duration: 100,
-      ease: "Power2",
-      yoyo: true,
+    shrek.content.on('pointerdown', () => {
+      shrek.scaleYoyo()
+      counterText.addLevel()
     })
   }
-
 
   update() {
   }
