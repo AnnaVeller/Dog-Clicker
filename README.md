@@ -12,4 +12,9 @@ https://annaveller.github.io/Test-Clicker/
 
 `npm run build`
 
-`gulp deploy` развернуть проект на github.io
+## Развернуть проект на github.io
+
+```
+npm run build
+gulp deploy
+```

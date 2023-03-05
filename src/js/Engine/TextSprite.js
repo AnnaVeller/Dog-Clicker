@@ -9,12 +9,13 @@ export default class TextSprite {
     this.content.setOrigin(this.config.origin.x, this.config.origin.y)
   }
 
-  showText() {
+  showText(delay, duration) {
     this.game.tweens.add({
       targets: this.content,
       alpha: 1,
-      duration: 400,
-      hold: 1000,
+      delay,
+      duration,
+      // hold: 1000,
     })
   }
 

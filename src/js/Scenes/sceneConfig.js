@@ -7,7 +7,7 @@ export const SCENE_CONFIG = {
       type: 'image',
       anchor: [0, 0],
       position: [0, 0],
-      url: require('../assets/bg.png'),
+      url: require('../../assets/bg.png'),
     },
 
     {
@@ -15,7 +15,7 @@ export const SCENE_CONFIG = {
       type: 'image',
       anchor: [0.5, 0.5],
       position: [bg.width / 2, 50],
-      url: require('../assets/progress.png'),
+      url: require('../../assets/progress.png'),
     },
 
     {
@@ -23,7 +23,7 @@ export const SCENE_CONFIG = {
       type: 'image',
       anchor: [0.5, 0.5],
       position: [bg.width / 2, bg.height / 2],
-      url: require('../assets/shrek.png'),
+      url: require('../../assets/shrek.png'),
       interactive: true
     },
 

@@ -1,6 +1,6 @@
 import Phaser from 'phaser'
-import PreloadScene from "./js/PreloadScene"
-import GameScene from "./js/GameScene"
+import PreloadScene from "./js/Scenes/PreloadScene"
+import GameScene from "./js/Scenes/GameScene"
 
 const game = new Phaser.Game(
   {
