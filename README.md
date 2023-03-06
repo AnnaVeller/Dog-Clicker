@@ -4,6 +4,8 @@ Test project
 
 https://annaveller.github.io/Test-Clicker/
 
+1400x1400 - default size
+
 ## Commands
 
 `npm install`
