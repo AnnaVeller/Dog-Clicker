@@ -3,6 +3,14 @@ const bg = {width: 600, height: 600}
 export const SCENE_CONFIG = {
   sprites: [
     {
+      key: 'bg2',
+      type: 'image',
+      anchor: [0, 0],
+      position: [0, 0],
+      url: require('../../assets/bg2.png'),
+    },
+
+    {
       key: 'bg',
       type: 'image',
       anchor: [0, 0],

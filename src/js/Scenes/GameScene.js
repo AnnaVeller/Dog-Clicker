@@ -3,7 +3,7 @@ import Sprite from "../Engine/Sprite"
 import Shrek from "../Shrek"
 import Counter from "../Counter"
 import TextSprite from "../Engine/TextSprite"
-import {GAME_DEFAULT_SIZE} from "../../index"
+import {getWorldView, resize} from "../Engine/resizer"
 
 export default class GameScene extends Phaser.Scene {
   constructor() {
@@ -15,22 +15,9 @@ export default class GameScene extends Phaser.Scene {
   }
 
   create() {
-    const container = this.add.container(0, 0)
-
     this.bg = new Sprite(this, {
       x: 700, y: 700,
       key: 'bg',
-    })
-
-    this.progress = new Sprite(this, {
-      x: 700, y: 200,
-      key: 'progress'
-    })
-
-    this.counterText = new Counter(this, {
-      x: 700, y: this.cameras.main.worldView.y + 100,
-      text: 0,
-      textStyle: {font: '80px Arial', fill: '#3d2828'},
     })
 
     this.shrek = new Shrek(this, {
@@ -42,6 +29,17 @@ export default class GameScene extends Phaser.Scene {
     this.timeUnder = new Sprite(this, {
       x: 700, y: 200,
       key: 'progress'
+    })
+
+    this.progress = new Sprite(this, {
+      x: 700, y: 400,
+      key: 'progress'
+    })
+
+    this.counterText = new Counter(this, {
+      x: 700, y: 100,
+      text: 0,
+      textStyle: {font: '80px Arial', fill: '#3d2828'},
     })
 
     this.counterTime = new TextSprite(this, {
@@ -58,7 +56,6 @@ export default class GameScene extends Phaser.Scene {
     })
 
     this.scale.on('resize', this.resize, this)
-
     this.resize(this.scale.gameSize)
   }
 
@@ -83,43 +80,27 @@ export default class GameScene extends Phaser.Scene {
     this.shrek.startFinalAnimation()
   }
 
-  resize(gameSize, baseSize, displaySize, resolution) {
-    const width = gameSize.width // this.cameras.main.width // gameSize.width
-    const height = gameSize.height // this.cameras.main.height // gameSize.height
-    const aspectRatio = gameSize.aspectRatio // отношение ширины изображения к его высоте
+  resize() {
+    resize(this)
 
-    this.isLandscape = aspectRatio > 1
-    this.isPortrait = !this.isLandscape
+    const midX = this.cameras.main.midPoint.x
+    const midY = this.cameras.main.midPoint.y
 
-    // выбираем наименьшую сторону и находим относительный скейл
-    const sizer = (this.isLandscape ? height : width) / GAME_DEFAULT_SIZE
+    // левый вверх экрана
+    const worldView = getWorldView(this.cameras.main)
 
-    // устанавливаем параметр this.cameras.main.midPoint
-    this.cameras.main.centerOn(692, 700)
-
-    this.bg.content.setScale(width / GAME_DEFAULT_SIZE, height / GAME_DEFAULT_SIZE)
-    // this.bg.content.setScale(sizer)
-    // this.shrek.changeScale(sizer)
-    // this.progress.changeScale(sizer)
-    this.progress.content.y = this.getWorldView().y + 100 * sizer
-
-    this.counterText.content.setScale(sizer)
-    this.counterText.content.y = this.getWorldView().y + 100 * sizer
-
-    // this.timeUnder.changeScale(sizer)
-    this.timeUnder.content.y = this.getWorldView().y + height - 200 * sizer
-
-    this.counterTime.content.setScale(sizer)
-    this.counterTime.content.y = this.getWorldView().y + height - 200 * sizer
-  }
-
-  getWorldView() {
-    // this.cameras.main.worldView - в начале работает некорректно
-
-    return {
-      x: this.cameras.main.midPoint.x - (this.cameras.main.displayWidth / 2),
-      y: this.cameras.main.midPoint.y - (this.cameras.main.displayHeight / 2)
+    // правый низ экрана
+    const bottomScreen = {
+      x: worldView.x + this.cameras.main.displayWidth,
+      y: worldView.y + this.cameras.main.displayHeight
     }
+
+    this.progress.content.setPosition(midX, worldView.y + 100)
+    this.counterText.content.setPosition(midX, worldView.y + 100)
+
+    this.timeUnder.content.setPosition(midX, bottomScreen.y - 100)
+    this.counterTime.content.setPosition(midX, bottomScreen.y - 100)
+
   }
 
 }
