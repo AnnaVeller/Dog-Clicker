@@ -1,4 +1,4 @@
-# Shrek Clicker
+# Dog Clicker
 
 Test project
 

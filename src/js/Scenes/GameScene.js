@@ -3,6 +3,7 @@ import Sprite from "../Engine/Sprite"
 import Shrek from "../Shrek"
 import Counter from "../Counter"
 import TextSprite from "../Engine/TextSprite"
+import Button from "../Button"
 import {getWorldView, resize} from "../Engine/resizer"
 
 export default class GameScene extends Phaser.Scene {
@@ -15,9 +16,13 @@ export default class GameScene extends Phaser.Scene {
   }
 
   create() {
-    this.bg = new Sprite(this, {
+    this.animations = []
+    this.timeLeft = 1
+    this.isGameEnd = false
+
+    this.background = new Sprite(this, {
       x: 700, y: 700,
-      key: 'bg',
+      key: 'background',
     })
 
     this.shrek = new Shrek(this, {
@@ -28,11 +33,13 @@ export default class GameScene extends Phaser.Scene {
 
     this.timeUnder = new Sprite(this, {
       x: 700, y: 200,
+      origin: {x: 0.5, y: 0.42},
       key: 'progress'
     })
 
     this.progress = new Sprite(this, {
       x: 700, y: 400,
+      origin: {x: 0.5, y: 0.42},
       key: 'progress'
     })
 
@@ -48,10 +55,23 @@ export default class GameScene extends Phaser.Scene {
       textStyle: {font: '80px Arial', fill: '#ff0000'},
     })
 
+    this.restart = new Button(this, {
+      x: 0, y: 200,
+      key: 'restart',
+      alpha: 0,
+      interactive: true,
+    })
+
     this.shrek.content.on('pointerdown', () => {
       if (!this.isGameEnd) {
         this.shrek.scaleYoyo()
         this.counterText.addLevel()
+      }
+    })
+
+    this.restart.content.on('pointerdown', () => {
+      if (this.isGameEnd) {
+        this.scene.start('Start')
       }
     })
 
@@ -78,6 +98,9 @@ export default class GameScene extends Phaser.Scene {
   gameEnd() {
     this.isGameEnd = true
     this.shrek.startFinalAnimation()
+    this.restart.content.alpha = 1
+    this.timeUnder.content.alpha = 0
+    this.counterTime.content.alpha = 0
   }
 
   resize() {
@@ -95,11 +118,27 @@ export default class GameScene extends Phaser.Scene {
       y: worldView.y + this.cameras.main.displayHeight
     }
 
-    this.progress.content.setPosition(midX, worldView.y + 100)
-    this.counterText.content.setPosition(midX, worldView.y + 100)
+    const aspectRatio = this.scale.gameSize.aspectRatio // отношение ширины изображения к его высоте
+    this.isLandscape = aspectRatio > 1
 
-    this.timeUnder.content.setPosition(midX, bottomScreen.y - 100)
-    this.counterTime.content.setPosition(midX, bottomScreen.y - 100)
+    if (this.isLandscape) {
+      this.progress.content.setPosition(230, midY - 70)
+      this.counterText.content.setPosition(230, midY - 70)
+
+      this.timeUnder.content.setPosition(230, midY + 70)
+      this.counterTime.content.setPosition(230, midY + 70)
+
+      this.restart.content.setPosition(230, midY + 70)
+    } else {
+      this.progress.content.setPosition(midX, worldView.y + 100)
+      this.counterText.content.setPosition(midX, worldView.y + 100)
+
+      this.timeUnder.content.setPosition(midX, bottomScreen.y - 100)
+      this.counterTime.content.setPosition(midX, bottomScreen.y - 100)
+
+      this.restart.content.setPosition(midX, bottomScreen.y - 100)
+    }
+
 
   }
 
