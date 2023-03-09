@@ -2,7 +2,7 @@
 
 Test project
 
-https://annaveller.github.io/Test-Clicker/
+https://annaveller.github.io/Dog-Clicker/
 
 1400x1400 - default size
 
