@@ -7,7 +7,7 @@ export const SCENE_CONFIG = {
       type: 'image',
       anchor: [0, 0],
       position: [0, 0],
-      url: require('../../assets/restart.png'),
+      url: require('../assets/restart.png'),
     },
 
     {
@@ -15,7 +15,7 @@ export const SCENE_CONFIG = {
       type: 'image',
       anchor: [0, 0],
       position: [0, 0],
-      url: require('../../assets/background.png'),
+      url: require('../assets/background.png'),
     },
 
     {
@@ -23,15 +23,15 @@ export const SCENE_CONFIG = {
       type: 'image',
       anchor: [0.5, 0.5],
       position: [bg.width / 2, 50],
-      url: require('../../assets/progress.png'),
+      url: require('../assets/progress.png'),
     },
 
     {
-      key: 'shrek',
+      key: 'dog',
       type: 'image',
       anchor: [0.5, 0.5],
       position: [bg.width / 2, bg.height / 2],
-      url: require('../../assets/shrek.png'),
+      url: require('../assets/dog.png'),
       interactive: true
     },
 

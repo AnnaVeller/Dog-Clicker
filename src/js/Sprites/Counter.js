@@ -1,4 +1,4 @@
-import TextSprite from "./Engine/TextSprite"
+import TextSprite from "../Engine/TextSprite"
 
 export default class Counter extends TextSprite {
   constructor(game, config) {

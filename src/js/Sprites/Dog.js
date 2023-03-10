@@ -1,6 +1,6 @@
-import Sprite from "./Engine/Sprite"
+import Sprite from "../Engine/Sprite"
 
-export default class Shrek extends Sprite {
+export default class Dog extends Sprite {
   constructor(game, config) {
     super(game, config)
 
@@ -28,6 +28,11 @@ export default class Shrek extends Sprite {
     if (this.animations && this.animations.scaling && this.animations.scaling.isPlaying()) {
       this.animations.scaling.stop()
     }
+
+    // делает из любого origin -> 0.5
+    this.content.x -= this.content.width * (this.content.originX - 0.5)
+    this.content.y -= this.content.height * (this.content.originY - 0.5)
+    this.content.setOrigin(0.5)
 
     this.animations.scaling = this.game.tweens.add({
       targets: this.content,

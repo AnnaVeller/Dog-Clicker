@@ -1,59 +1,63 @@
 import Phaser from "phaser"
 import Sprite from "../Engine/Sprite"
-import Shrek from "../Shrek"
-import Counter from "../Counter"
+import Dog from "../Sprites/Dog"
+import Counter from "../Sprites/Counter"
 import TextSprite from "../Engine/TextSprite"
-import Button from "../Button"
+import Button from "../Engine/Button"
 import {getWorldView, resize} from "../Engine/resizer"
 
 export default class GameScene extends Phaser.Scene {
   constructor() {
     super('Game')
+  }
 
+  init() {
     this.animations = []
     this.timeLeft = 5
     this.isGameEnd = false
+
+    this.sprites = {}
+    this.texts = {}
   }
 
   create() {
-    this.animations = []
-    this.timeLeft = 1
-    this.isGameEnd = false
-
-    this.background = new Sprite(this, {
+    this.sprites.background = new Sprite(this, {
       x: 700, y: 700,
       key: 'background',
     })
 
-    this.shrek = new Shrek(this, {
-      x: 700, y: 700,
-      key: 'shrek',
+    this.sprites.dog = new Dog(this, {
+      x: 700, y: 950,
+      origin: {x: 0.5, y: 1},
+      key: 'dog',
       interactive: true,
     })
 
-    this.timeUnder = new Sprite(this, {
-      x: 700, y: 200,
-      origin: {x: 0.5, y: 0.42},
-      key: 'progress'
-    })
-
-    this.progress = new Sprite(this, {
-      x: 700, y: 400,
-      origin: {x: 0.5, y: 0.42},
-      key: 'progress'
-    })
-
-    this.counterText = new Counter(this, {
-      x: 700, y: 100,
+    this.levelCounter = this.add.container(0, 0)
+    this.texts.level = new Counter(this, {
+      x: 0, y: 0,
       text: 0,
       textStyle: {font: '80px Arial', fill: '#3d2828'},
     })
+    this.sprites.progressLevel = new Sprite(this, {
+      x: 0, y: 0,
+      origin: {x: 0.5, y: 0.42},
+      key: 'progress'
+    })
+    this.levelCounter.add([this.sprites.progressLevel.content, this.texts.level.content])
 
-    this.counterTime = new TextSprite(this, {
-      x: 700, y: 0,
+    this.timeCounter = this.add.container(0, 0)
+    this.sprites.progressTime = new Sprite(this, {
+      x: 0, y: 0,
+      origin: {x: 0.5, y: 0.42},
+      key: 'progress'
+    })
+    this.texts.time = new TextSprite(this, {
+      x: 0, y: 0,
       text: 10,
       textStyle: {font: '80px Arial', fill: '#ff0000'},
     })
+    this.timeCounter.add([this.sprites.progressTime.content, this.texts.time.content])
 
     this.restart = new Button(this, {
       x: 0, y: 200,
@@ -62,10 +66,10 @@ export default class GameScene extends Phaser.Scene {
       interactive: true,
     })
 
-    this.shrek.content.on('pointerdown', () => {
+    this.sprites.dog.content.on('pointerdown', () => {
       if (!this.isGameEnd) {
-        this.shrek.scaleYoyo()
-        this.counterText.addLevel()
+        this.sprites.dog.scaleYoyo()
+        this.texts.level.addLevel()
       }
     })
 
@@ -92,18 +96,20 @@ export default class GameScene extends Phaser.Scene {
       return
     }
 
-    this.counterTime.changeText(this.timeLeft.toFixed(0))
+    this.texts.time.changeText(this.timeLeft.toFixed(0))
   }
 
   gameEnd() {
     this.isGameEnd = true
-    this.shrek.startFinalAnimation()
+    this.sprites.dog.startFinalAnimation()
     this.restart.content.alpha = 1
-    this.timeUnder.content.alpha = 0
-    this.counterTime.content.alpha = 0
+    this.timeCounter.alpha = 0
   }
 
   resize() {
+    // сцена продолжает работать, даже если мы ушли отсюда
+    if (!this.scene.settings.active) return
+
     resize(this)
 
     const midX = this.cameras.main.midPoint.x
@@ -122,23 +128,14 @@ export default class GameScene extends Phaser.Scene {
     this.isLandscape = aspectRatio > 1
 
     if (this.isLandscape) {
-      this.progress.content.setPosition(230, midY - 70)
-      this.counterText.content.setPosition(230, midY - 70)
-
-      this.timeUnder.content.setPosition(230, midY + 70)
-      this.counterTime.content.setPosition(230, midY + 70)
-
+      this.levelCounter.setPosition(230, midY - 70)
+      this.timeCounter.setPosition(230, midY + 70)
       this.restart.content.setPosition(230, midY + 70)
     } else {
-      this.progress.content.setPosition(midX, worldView.y + 100)
-      this.counterText.content.setPosition(midX, worldView.y + 100)
-
-      this.timeUnder.content.setPosition(midX, bottomScreen.y - 100)
-      this.counterTime.content.setPosition(midX, bottomScreen.y - 100)
-
+      this.levelCounter.setPosition(midX, worldView.y + 100)
+      this.timeCounter.setPosition(midX, bottomScreen.y - 100)
       this.restart.content.setPosition(midX, bottomScreen.y - 100)
     }
-
 
   }
 

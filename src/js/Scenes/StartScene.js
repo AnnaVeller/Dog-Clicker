@@ -1,19 +1,14 @@
 import Phaser from "phaser"
-import {SCENE_CONFIG} from "./sceneConfig"
 import TextSprite from "../Engine/TextSprite"
 import {resize} from "../Engine/resizer"
 
-export default class PreloadScene extends Phaser.Scene {
+export default class StartScene extends Phaser.Scene {
   constructor() {
     super('Start')
-
-    this.animations = []
   }
 
-  preload() {
-    SCENE_CONFIG.sprites.forEach((el) => {
-      this.load.image(el.key, el.url)
-    })
+  init() {
+    this.animations = []
   }
 
   create() {
@@ -64,11 +59,8 @@ export default class PreloadScene extends Phaser.Scene {
   resize() {
     // сцена продолжает работать, даже если мы ушли отсюда
     if (!this.scene.settings.active) return
-    resize(this)
 
-    // this.text.content.setPosition(this.cameras.main.centerX, this.cameras.main.centerY - 80 * sizer)
-    // this.text2.content.setPosition(this.cameras.main.centerX, this.cameras.main.centerY - 20 * sizer)
-    // this.text3.content.setPosition(this.cameras.main.centerX, this.cameras.main.centerY + 100 * sizer)
+    resize(this)
   }
 
 }
