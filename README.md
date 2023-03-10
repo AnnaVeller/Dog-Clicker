@@ -1,10 +1,6 @@
-# Dog Clicker
+# [Dog Clicker](https://annaveller.github.io/Dog-Clicker/)
 
-Test project
-
-https://annaveller.github.io/Dog-Clicker/
-
-1400x1400 - default size
+Игра в разработке..
 
 ## Commands
 
@@ -20,3 +16,7 @@ https://annaveller.github.io/Dog-Clicker/
 npm run build
 gulp deploy
 ```
+
+## Параметры
+
+1400x1400 - default size
