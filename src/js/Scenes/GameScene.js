@@ -9,6 +9,8 @@ import {getWorldView, resize} from "../Engine/resizer"
 export default class GameScene extends Phaser.Scene {
   constructor() {
     super('Game')
+
+    this.maxLevel = 0
   }
 
   init() {
@@ -34,11 +36,13 @@ export default class GameScene extends Phaser.Scene {
     })
 
     this.levelCounter = this.add.container(0, 0)
+
     this.texts.level = new Counter(this, {
       x: 0, y: 0,
       text: 0,
       textStyle: {font: '80px Arial', fill: '#3d2828'},
     })
+
     this.sprites.progressLevel = new Sprite(this, {
       x: 0, y: 0,
       origin: {x: 0.5, y: 0.42},
@@ -64,6 +68,13 @@ export default class GameScene extends Phaser.Scene {
       key: 'restart',
       alpha: 0,
       interactive: true,
+    })
+
+    this.texts.maxLevel = new TextSprite(this, {
+      x: 0, y: 0,
+      origin: {x: 0.5, y: 0},
+      text: `max: ${this.maxLevel}`,
+      textStyle: {font: '40px Arial', fill: '#3d2828'},
     })
 
     this.sprites.dog.content.on('pointerdown', () => {
@@ -104,6 +115,11 @@ export default class GameScene extends Phaser.Scene {
     this.sprites.dog.startFinalAnimation()
     this.restart.content.alpha = 1
     this.timeCounter.alpha = 0
+
+    if (this.maxLevel < this.texts.level.getLevel()) {
+      this.maxLevel = this.texts.level.getLevel()
+      this.texts.maxLevel.changeText(`max: ${this.maxLevel}`)
+    }
   }
 
   resize() {
@@ -131,10 +147,13 @@ export default class GameScene extends Phaser.Scene {
       this.levelCounter.setPosition(230, midY - 70)
       this.timeCounter.setPosition(230, midY + 70)
       this.restart.content.setPosition(230, midY + 70)
+      this.texts.maxLevel.content.setPosition(230, midY - 160)
     } else {
       this.levelCounter.setPosition(midX, worldView.y + 100)
       this.timeCounter.setPosition(midX, bottomScreen.y - 100)
       this.restart.content.setPosition(midX, bottomScreen.y - 100)
+      this.texts.maxLevel.content.setPosition(midX, worldView.y+10)
+
     }
 
   }

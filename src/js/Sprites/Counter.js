@@ -12,6 +12,10 @@ export default class Counter extends TextSprite {
     this.changeText(this.counter)
   }
 
+  getLevel(){
+    return this.counter
+  }
+
 }
 
 
